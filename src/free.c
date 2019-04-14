@@ -15,27 +15,16 @@
 
 void	free(void *ptr)
 {
-	t_page		*page;
-	t_block		block;
+	size_t	*size;
 
 	if (ptr == NULL)
 		return ;
-	block = find_addr_in_map(g_tiny_map, g_page_size * 2, ptr);
-	if (block.block == NULL)
-		block = find_addr_in_map(g_small_map, g_page_size * 2, ptr);
-	if (block.block == NULL)
+	size = (size_t *)(ptr - sizeof(size_t));
+	if (size >= LARGE + 1)
 	{
-		page = find_elem_in_map(g_large_map, g_page_size * 2, ptr);
-		if (page == NULL)
-		{
-			printf("MAJOR ERROR!!!!!\n");
-			exit(1);
-		}
-		munmap(ptr, page->size);
-		page->addr = 0;
-		page->size = 0;
-		return ;
+		delete_addr(size);
+		munmap(size, *size);
 	}
-	ft_bzero(block.block, *block.size_part);
-	*block.size_part = 0;
+	else
+		*size &= ~1L;
 }

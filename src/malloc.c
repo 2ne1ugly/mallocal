@@ -12,9 +12,7 @@
 
 #include "malloc.h"
 
-//first sizeof(size_t) will be the size of the array. size_t
-//my malloc only works til 500 MB!... i think?
-//for now, what it does is using tons of pages.
+//first pointer of the page is the pointer to the next page.
 
 void	*malloc(size_t size)
 {

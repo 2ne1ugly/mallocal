@@ -12,135 +12,83 @@
 
 #include "malloc.h"
 
-t_page	*find_elem_in_map(t_page *map, size_t map_size, void *ptr)
+t_tiny_slab		*find_tiny_free_block(size_t request)
 {
-	size_t	i;
-	size_t	max_element;
+	size_t		i;
+	size_t		elem_size;
+	t_tiny_slab	*curr_map;
 
-	i = 0;
-	max_element = map_size / sizeof(t_page);
-	while (i < max_element - 1 && map[i].addr != ptr)
-		i++;
-	if (i == max_element - 1)
+	elem_size = (g_page_size * 4) / sizeof(t_tiny_slab);
+	curr_map = g_tiny_map;
+	i = 1;
+	while (1)
 	{
-		if (map[i].addr == NULL)
+		if (curr_map[i].size == ~4)
 		{
-			if (ptr != NULL)
-				return (NULL);
-			if (!(map[i].addr = new_map(g_page_size * 2)))
-				return (0);
-			map[i].size = g_page_size * 2;
-			ft_bzero(map[i].addr, g_page_size * 2);
-			return (&map[i]);
+			if (curr_map[i].data[0] == NULL)
+				if (!(curr_map[i].data[0] = new_map()))
+					return (NULL);
+			curr_map = (void *)curr_map[i].data[0];
+			i = 1;
 		}
-		return (find_elem_in_map(map[i].addr, g_page_size * 2, ptr));
+		if (!(curr_map[i].size & 1L) &&
+			(curr_map[i].size & ~1L) - sizeof(size_t) >= request)
+			return (&curr_map[i]);
+		i += (curr_map[i].size & ~1L) / sizeof(t_tiny_slab);
 	}
-	return (&map[i]);
 }
 
-t_block	find_block_in_page(char *page, size_t map_size, void *ptr)
+t_small_slab	*find_small_free_block(size_t request)
 {
-	size_t	i;
-	t_block block;
+	size_t			i;
+	t_small_slab	*curr_map;
 
-	i = sizeof(size_t);
-	while (i < map_size)
+	curr_map = g_small_map;
+	i = 1;
+	while (1)
 	{
-		if (ptr == (void *)&page[i])
+		if (curr_map[i].size == ~4)
 		{
-			block.block = (void **)&page[i];
-			block.size_part = (size_t *)&page[i - sizeof(size_t)];
-			block.parent.addr = page;
-			block.parent.size = map_size;
-			return (block);
+			if (curr_map[i].data[0] == NULL)
+				if (!(curr_map[i].data[0] = new_map()))
+					return (NULL);
+			curr_map = (void *)curr_map[i].data[0];
+			i = 1;
 		}
-		i += *(size_t *)&page[i - sizeof(size_t)];
+		if (!(curr_map[i].size & 1L) &&
+			(curr_map[i].size & ~1L) - sizeof(size_t) >= request)
+			return (&curr_map[i]);
+		i += (curr_map[i].size & ~1L) / sizeof(t_small_slab);
 	}
-	block.block = 0;
-	return (block);
 }
 
-t_block	find_addr_in_map(t_page *map, size_t map_size, void *ptr)
+void			delete_addr(void	*ptr)
 {
-	size_t	i;
-	size_t	max_element;
-	t_block	block;
+	size_t		i;
+	size_t		elem_size;
+	size_t		*curr_map;
 
+	curr_map = g_large_map;
 	i = 0;
-	max_element = map_size / sizeof(t_page);
-	while (i < max_element - 1)
+	elem_size = (g_page_size * 4) / sizeof(size_t);
+	while (1)
 	{
-		if (map[i].addr != NULL)
+		if (i == elem_size - 1)
 		{
-			block = find_block_in_page(map[i].addr, map[i].size, ptr);
-			if (block.block != NULL)
-				return (block);
-		}
-		i++;
-	}
-	return (block);
-}
-
-t_block	find_free_memory_in_page(char *page, size_t map_size, size_t request)
-{
-	size_t	i;
-	size_t	j;
-	t_block block;
-
-	i = 0;
-	while (i < map_size - request - sizeof(size_t))
-	{
-		if (*(size_t *)&page[i] == 0)
-		{
-			j = 0;
-			while(page[i + sizeof(size_t) + j] == 0)
+			if (curr_map[i] == NULL)
 			{
-				j++;
-				if (request == j)
-				{
-					block.block = (void **)&page[i + sizeof(size_t)];
-					block.size_part = (size_t *)&page[i];
-					block.parent.addr = page;
-					block.parent.size = map_size;
-					return (block);
-				}
+				printf("major error!!! NOOO");
+				exit(1);
 			}
-			i++;
+			curr_map = curr_map[i];
+			i = 0;
 		}
-		else
-			i += *(size_t *)&page[i] + sizeof(size_t);
-	}
-	block.block = 0;
-	return (block);
-}
-
-t_block find_free_memory(t_page *map, size_t map_size, size_t request)
-{
-	size_t	i;
-	size_t	max_element;
-	t_block	block;
-	t_page	*page;
-
-	i = 0;
-	max_element = map_size / sizeof(t_page);
-	block.block = NULL;
-	while (i < max_element - 1)
-	{
-		if (map[i].addr != NULL)
+		if (curr_map[i] == ptr)
 		{
-			block =
-				find_free_memory_in_page(map[i].addr, map[i].size, request);
-			if (block.block != NULL)
-				return (block);
+			curr_map[i] = NULL;
+			return ;
 		}
 		i++;
 	}
-	page = find_elem_in_map(map, map_size, NULL);
-	page->size = g_page_size * 2;
-	page->addr = new_map(g_page_size * 2);
-	if (page->addr == NULL)
-		return (block);
-	block.size_part = page->addr;
-	block.block = page->addr + sizeof(size_t);
-	return (block);
 }
+
