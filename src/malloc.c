@@ -16,29 +16,30 @@
 
 void	*malloc(size_t size)
 {
-	size_t	request_size;
-	t_block	block;
-	void	*mem;
-	t_page	*empty_page;
+	size_t			*mem;
+	t_large_page	*page;
+	size_t			*large;
 
 	if (!check_minor())
 		return (NULL);
-	if (size > LARGE)
+	if (size > m)
 	{
-		request_size = lowest_multiple(g_page_size, size + sizeof(size_t));
-		if (!(mem = new_map(g_page_size)))
-			return (0);
-		empty_page = find_elem_in_map(g_large_map, g_page_size * 2, NULL);
-		empty_page->addr = mem;
-		empty_page->size = request_size;
+		large = find_addr_space();
+		page = new_map(large, lowest_multiple(g_page_size, size));
+		*large = page;
+		page->page_size = lowest_multiple(g_page_size, size);
+		page->size = size;
+		return (&page->addr);
 	}
 	else
 	{
-		block = find_free_memory(g_tiny_map, g_page_size * 2, size);
-		if (block.block == NULL)
-			return (0);
-		*block.size_part = size;
-		mem = block.block;
+		if (size > n)
+			mem = find_free_block(g_small_map, size);
+		else
+			mem = find_free_block(g_tiny_map, size);
+		if (mem == NULL)
+			return (NULL);
+		mem = alloc_free_block(mem, size);
 	}
 	return (mem);
 }

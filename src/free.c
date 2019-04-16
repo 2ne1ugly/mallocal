@@ -15,16 +15,24 @@
 
 void	free(void *ptr)
 {
-	size_t	*size;
+	size_t			*block;
+	t_large_page	*page;
 
 	if (ptr == NULL)
 		return ;
-	size = (size_t *)(ptr - sizeof(size_t));
-	if (size >= LARGE + 1)
+	if (!check_minor())
+		return (NULL);
+	block = ptr;
+	block = &block[-1];
+	if (block[0] > m)
 	{
-		delete_addr(size);
-		munmap(size, *size);
+		page = &block[-2];
+		*page->page_loc = 0;
+		munmap(page, page->page_size);
 	}
 	else
-		*size &= ~1L;
+	{
+		free_the_block(block);
+		defrag_free_block(block);
+	}
 }

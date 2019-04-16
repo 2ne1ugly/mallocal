@@ -12,9 +12,11 @@
 
 #include "malloc.h"
 
-int		lowest_multiple(int mult, int val)
+size_t	lowest_multiple(size_t mult, size_t val)
 {
-	return (((val / mult) + 1) * mult);
+	if (val % mult)
+		return (val);
+	return (val + mult - val % mult);
 }
 
 int		check_minor(void)
@@ -34,13 +36,36 @@ int		check_minor(void)
 	return (1);
 }
 
-void	*new_map(size_t request)
+size_t	*new_map(size_t *prev_page, size_t request)
 {
-	void	*mem;
+	size_t	*mem;
+	size_t	count;
 
+	count = request / sizeof(size_t);
 	mem = mmap(NULL, request, PROT_READ | PROT_WRITE,
 		MAP_ANONYMOUS | MAP_PRIVATE, 0, 0);
 	if (mem == MAP_FAILED)
 		mem = NULL;
+	mem[0] = (size_t)prev_page;
+	mem[1] = ~2L;
+	mem[2] = (count - 4) * sizeof(size_t);
+	mem[count - 4] = 0;
+	mem[count - 3] = (count - 4) * sizeof(size_t);
+	mem[count - 2] = ~4L; 
+	mem[count - 1] = 0;
 	return (mem);
+}
+
+int		is_free_header(size_t *block)
+{
+	if (*block == ~4L || *block % sizeof(size_t) != 0)
+		return (0);
+	return (!block[*block - 2]);
+}
+
+int		is_free_footer(size_t *block)
+{
+	if (*block == ~2L || *block % sizeof(size_t) != 0)
+		return (0);
+	return (!block[-1]);
 }

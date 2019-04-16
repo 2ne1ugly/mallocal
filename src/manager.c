@@ -12,83 +12,100 @@
 
 #include "malloc.h"
 
-t_tiny_slab		*find_tiny_free_block(size_t request)
+size_t	*find_free_block(size_t *map, size_t request)
 {
-	size_t		i;
-	size_t		elem_size;
-	t_tiny_slab	*curr_map;
+	size_t	i;
 
-	elem_size = (g_page_size * 4) / sizeof(t_tiny_slab);
-	curr_map = g_tiny_map;
-	i = 1;
+	i = 2;
 	while (1)
 	{
-		if (curr_map[i].size == ~4)
+		if (map[i] == ~4L)
 		{
-			if (curr_map[i].data[0] == NULL)
-				if (!(curr_map[i].data[0] = new_map()))
-					return (NULL);
-			curr_map = (void *)curr_map[i].data[0];
-			i = 1;
+			if (map[i + 1] == NULL)
+				map[i + 1] = new_map(map, g_page_size * 4);
+			if (map[i + 1] == NULL)
+				return (NULL);
+			map = map[i + 1];
+			i = 2;
 		}
-		if (!(curr_map[i].size & 1L) &&
-			(curr_map[i].size & ~1L) - sizeof(size_t) >= request)
-			return (&curr_map[i]);
-		i += (curr_map[i].size & ~1L) / sizeof(t_tiny_slab);
+		if (is_free_header(&map[i]) && map[i] - 3 * sizeof(size_t) >= request)
+			return (&map[i]);
+		i += lowest_multiple(sizeof(size_t), map[i]) / sizeof(size_t);
 	}
 }
 
-t_small_slab	*find_small_free_block(size_t request)
+size_t	*find_addr_space(void)
 {
-	size_t			i;
-	t_small_slab	*curr_map;
+	size_t	i;
+	size_t	*curr_map;
 
-	curr_map = g_small_map;
-	i = 1;
-	while (1)
-	{
-		if (curr_map[i].size == ~4)
-		{
-			if (curr_map[i].data[0] == NULL)
-				if (!(curr_map[i].data[0] = new_map()))
-					return (NULL);
-			curr_map = (void *)curr_map[i].data[0];
-			i = 1;
-		}
-		if (!(curr_map[i].size & 1L) &&
-			(curr_map[i].size & ~1L) - sizeof(size_t) >= request)
-			return (&curr_map[i]);
-		i += (curr_map[i].size & ~1L) / sizeof(t_small_slab);
-	}
-}
-
-void			delete_addr(void	*ptr)
-{
-	size_t		i;
-	size_t		elem_size;
-	size_t		*curr_map;
-
+	i = 2;
 	curr_map = g_large_map;
-	i = 0;
-	elem_size = (g_page_size * 4) / sizeof(size_t);
 	while (1)
 	{
-		if (i == elem_size - 1)
+		if (curr_map[i] == ~4L)
 		{
-			if (curr_map[i] == NULL)
-			{
-				printf("major error!!! NOOO");
-				exit(1);
-			}
-			curr_map = curr_map[i];
-			i = 0;
+			if (curr_map[i + 1] == NULL)
+				curr_map[i + 1] = new_map(curr_map, g_page_size * 4);
+			if (curr_map[i + 1] == NULL)
+				return (NULL);
+			curr_map = curr_map[i + 1];
+			i = 2;
 		}
-		if (curr_map[i] == ptr)
-		{
-			curr_map[i] = NULL;
-			return ;
-		}
+		if (curr_map[i] == 0)
+			return (&curr_map[i]);
 		i++;
 	}
 }
 
+void	free_the_block(size_t *block)
+{
+	size_t	mem_count;
+
+	mem_count = lowest_multiple(sizeof(size_t), *block);
+	block[0] = mem_count;
+	block[mem_count / sizeof(size_t) - 1] = mem_count;
+	block[mem_count / sizeof(size_t) - 2] = 0;
+}
+
+void	defrag_free_block(size_t *block)
+{
+	size_t	mem_count;
+
+	mem_count = *block;
+	if (is_free_header(&block[mem_count / sizeof(size_t)]))
+		mem_count += block[mem_count / sizeof(size_t)];
+	if (is_free_footer(&block[-1]))
+	{
+		block[-block[-1]] = block[-1] + mem_count;
+		block[mem_count - 1] = block[-1] + mem_count;
+	}
+	else
+	{
+		block[0] = mem_count;
+		block[mem_count - 1] = mem_count;
+	}
+}
+
+size_t	*alloc_free_block(size_t *block, size_t request)
+{
+	size_t	i;
+	size_t	left_over;
+	size_t	next_header;
+	size_t	next_next_header;
+
+	next_header = lowest_multiple(sizeof(size_t), *block) / sizeof(size_t);
+	left_over = *block - lowest_multiple(sizeof(size_t), *block);
+	*block = request;
+	block[next_header - 1] = request;
+	block[next_header - 2] = 1;
+	if (left_over > 0)
+	{
+		block[next_header] = left_over;
+		next_next_header = next_header +
+			lowest_multiple(8, left_over) / sizeof(size_t);
+		block[next_next_header - 1] = left_over;
+		block[next_next_header - 2] = 0;
+	}
+	return (block + sizeof(size_t));
+}

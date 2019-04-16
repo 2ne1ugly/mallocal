@@ -18,10 +18,6 @@
 # include <libft.h>
 # include "util.h"
 
-# define LARGE 100000
-# define SMALL 2000
-# define TINY 100
-
 extern t_page	*g_large_map;
 extern t_page	*g_small_map;
 extern t_page	*g_tiny_map;

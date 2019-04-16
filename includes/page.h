@@ -26,38 +26,28 @@
 
 typedef struct	s_large_page
 {
+	void	*page_loc;
+	size_t	page_size;
 	size_t	size;
-	char	pointer_addr;
+	size_t	addr;
 }				t_large_page;
 
 /*
-**	holds 256 bytes multiple per buffer
+**	small, tiny: 
 */
 
 /*
-**	first slab holds the address to the prev page.
-**	it contains "~2" as a size.
+**	the malloc flag takes the whole size_t just before the footer
 */
 
 /*
-**	last slab holds the address to the next page.
-**	it contains "~4" as a size.
+**	first two memory contains two value.
+**	prev page and then ~2L.
 */
-
-typedef	struct	s_small_slab
-{
-	size_t	size;
-	size_t	data[63];
-}				t_small_slab;
 
 /*
-**	holds 16 bytes multiple per buffer
+**	last two memory contains two value.
+**	~4L and then page to next.
 */
-
-typedef	struct	s_tiny_slab
-{
-	size_t	size;
-	size_t	data[3];
-}				t_tiny_slab;
 
 #endif
