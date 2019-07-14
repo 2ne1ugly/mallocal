@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/12 21:15:28 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/13 16:31:11 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/15 20:52:31 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,13 @@
 # include <libft.h>
 # include "util.h"
 
-extern t_page	*g_large_map;
-extern t_page	*g_small_map;
-extern t_page	*g_tiny_map;
-extern size_t	g_page_size;
+# define m	300
+# define n	100
+
+extern t_large_page	*g_large_map;
+extern size_t		*g_small_map;
+extern size_t		*g_tiny_map;
+extern size_t		g_page_size;
 
 void			*malloc(size_t size);
 void			free(void *ptr);

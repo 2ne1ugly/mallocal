@@ -6,10 +6,11 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/12 21:11:21 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/13 16:58:26 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/25 12:29:23 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "malloc.h"
 #include <stdio.h>
 #include <errno.h>
@@ -17,28 +18,16 @@
 
 #define COUNT 2
 
-//fails from free.x
+//test realloc.
 int main(void)
 {
-	char *str[COUNT];
-	int i;
-
-	i = 0;
-	while (i < COUNT)
-	{
-		str[i] = malloc(1);
-		if (str[i] == NULL)
-			printf("malloc fail: %d \n", i);
-		printf("malloc: %d\n", i);
-		i++;
-	}
-	i = 0;
-	while (i < COUNT)
-	{
-		free(str[i]);
-		printf("free: %d\n", i);
-		i++;
-	}
-
+	int *a;
+	int *b;
+	int *c;
+	a = malloc(1);
+	b = malloc(9);
+	c = malloc(1);
+	free(b);
+	b = malloc(1);
 	return (0);
 }

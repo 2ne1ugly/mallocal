@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/12 21:11:37 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/13 16:49:11 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/21 15:32:41 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,9 @@ void	*malloc(size_t size)
 	if (size > m)
 	{
 		large = find_addr_space();
-		page = new_map(large, lowest_multiple(g_page_size, size));
-		*large = page;
+		page =
+			(t_large_page *)new_map(large, lowest_multiple(g_page_size, size));
+		*large = (size_t)page;
 		page->page_size = lowest_multiple(g_page_size, size);
 		page->size = size;
 		return (&page->addr);

@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/12 22:14:18 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/13 15:28:02 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/15 21:26:13 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 size_t	lowest_multiple(size_t mult, size_t val)
 {
-	if (val % mult)
+	if (val % mult == 0)
 		return (val);
 	return (val + mult - val % mult);
 }
@@ -24,15 +24,13 @@ int		check_minor(void)
 	if (g_page_size != 0)
 		return (1);
 	g_page_size = getpagesize();
-	if (!g_large_map && !(g_large_map = new_map(g_page_size * 2)))
+	if (!g_large_map && !(g_large_map =
+		(t_large_page *)new_map(NULL, g_page_size * 4)))
 		return (0);
-	if (!g_small_map && !(g_small_map = new_map(g_page_size * 2)))
+	if (!g_small_map && !(g_small_map = new_map(NULL, g_page_size * 4)))
 		return (0);
-	if (!g_tiny_map && !(g_tiny_map = new_map(g_page_size * 2)))
+	if (!g_tiny_map && !(g_tiny_map = new_map(NULL, g_page_size * 4)))
 		return (0);
-	ft_bzero(g_large_map, g_page_size * 2);
-	ft_bzero(g_small_map, g_page_size * 2);
-	ft_bzero(g_tiny_map, g_page_size * 2);
 	return (1);
 }
 
@@ -58,14 +56,14 @@ size_t	*new_map(size_t *prev_page, size_t request)
 
 int		is_free_header(size_t *block)
 {
-	if (*block == ~4L || *block % sizeof(size_t) != 0)
+	if (*block == (size_t)~4L || *block % sizeof(size_t) != 0)
 		return (0);
-	return (!block[*block - 2]);
+	return (!block[*block / sizeof(size_t) - 2]);
 }
 
 int		is_free_footer(size_t *block)
 {
-	if (*block == ~2L || *block % sizeof(size_t) != 0)
+	if (*block == (size_t)~2L || *block % sizeof(size_t) != 0)
 		return (0);
 	return (!block[-1]);
 }
