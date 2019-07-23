@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/21 20:40:50 by mchi              #+#    #+#             */
-/*   Updated: 2019/07/22 20:19:32 by mchi             ###   ########.fr       */
+/*   Updated: 2019/07/23 15:33:35 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void		*find_tiny_free(t_tiny *t, size_t size)
 		meta = (t_meta *)&t->block[i];
 		if (!(meta->cap & 1) && size + sizeof(t_meta) * 2 <= meta->cap)
 			if (is_capable(meta, size))
-				return aquire_buffer(meta, size);
+				return aquire_buffer(meta, size, size);
 		i += meta->cap / ST;
 	}
 	return (NULL);

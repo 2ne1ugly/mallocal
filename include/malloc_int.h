@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/21 18:09:26 by mchi              #+#    #+#             */
-/*   Updated: 2019/07/23 00:18:49 by mchi             ###   ########.fr       */
+/*   Updated: 2019/07/23 15:33:13 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ struct
 void			*find_tiny_free(t_tiny *m, size_t size);
 void			*find_small_free(t_small *m, size_t size);
 
-void			*aquire_buffer(t_meta *header, size_t size);
+void			*aquire_buffer(t_meta *header, size_t size, size_t req);
 int				is_capable(t_meta *meta, size_t size);
 size_t			align(size_t n, size_t m);
 void			*new_empty_map(size_t size);
@@ -47,5 +47,8 @@ void			*large_malloc(t_map_map *m, size_t size);
 int				validate_meta(t_meta *meta);
 void			unmap_large(t_meta *meta);
 void			delete_map_elem(void **elem);
+
+void			defrag_meta(t_meta *meta);
+void			free_buffer(t_meta *header);
 
 #endif

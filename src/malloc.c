@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/21 18:56:42 by mchi              #+#    #+#             */
-/*   Updated: 2019/07/22 23:42:57 by mchi             ###   ########.fr       */
+/*   Updated: 2019/07/23 15:32:55 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int				is_capable(t_meta *meta, size_t size)
 	return (0);
 }
 
-void			*aquire_buffer(t_meta *header, size_t size)
+void			*aquire_buffer(t_meta *header, size_t size, size_t req)
 {
 	size_t	need;
 	size_t	left;
@@ -37,7 +37,7 @@ void			*aquire_buffer(t_meta *header, size_t size)
 	need = align(size, ST) + sizeof(t_meta) * 2;
 	footer = (void *)header + need - sizeof(t_meta);
 	footer->cap = need + 1;
-	footer->req = size;
+	footer->req = req;
 	if (header->cap != need)
 	{
 		left = header->cap - need;

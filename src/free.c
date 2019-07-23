@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/22 13:29:05 by mchi              #+#    #+#             */
-/*   Updated: 2019/07/23 00:06:48 by mchi             ###   ########.fr       */
+/*   Updated: 2019/07/23 14:35:50 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,15 +78,9 @@ void	free(void *ptr)
 		return ;
 	meta = ptr - sizeof(t_meta);
 	if (!validate_meta(meta))
-	{
 		ft_printf("invalid free\n");
-		return ;
-	}
 	if (!(meta->cap & 1))
-	{
-		ft_printf("free on non allocated\n");
 		return ;
-	}
 	if (meta->cap - 1 > S_BUFF_CAP)
 		unmap_large(meta);
 	else
