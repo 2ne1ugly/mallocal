@@ -1,31 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   malloc.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/22 15:11:51 by mchi              #+#    #+#             */
-/*   Updated: 2019/07/22 21:46:01 by mchi             ###   ########.fr       */
+/*   Created: 2019/07/21 18:08:11 by mchi              #+#    #+#             */
+/*   Updated: 2019/07/22 15:09:15 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
-#include "malloc_int.h"
+#ifndef MALLOC_H
+# define MALLOC_H
 
-#include <stdio.h>
+#include <stdlib.h>
 
-int main () 
-{ 
-int i; 
-char * addr; 
+void	free(void *ptr);
+void	*malloc(size_t size);
+void 	*realloc(void *ptr, size_t size);
 
-i = 0; 
-while (i <1024) 
-{ 
-addr = (char *) malloc (1024); 
-addr [0] = 42; 
-i ++; 
-} 
-return (0); 
-} 
+#endif

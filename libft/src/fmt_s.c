@@ -1,33 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   malloc.h                                           :+:      :+:    :+:   */
+/*   fmt_s.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/12 21:15:28 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/15 20:52:31 by mchi             ###   ########.fr       */
+/*   Created: 2019/04/25 18:32:51 by mchi              #+#    #+#             */
+/*   Updated: 2019/05/25 19:34:46 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MALLOC_H
-# define MALLOC_H
-# include <stdlib.h>
-# include <sys/mman.h>
-# include <unistd.h>
-# include <libft.h>
-# include "util.h"
+#include "ft_printf_int.h"
 
-# define m	300
-# define n	100
+t_vec	fmt_s(t_opt *opt, va_list *arg)
+{
+	char	*str;
+	t_vec	out;
+	int		length;
 
-extern t_large_page	*g_large_map;
-extern size_t		*g_small_map;
-extern size_t		*g_tiny_map;
-extern size_t		g_page_size;
-
-void			*malloc(size_t size);
-void			free(void *ptr);
-void 			show_alloc_mem();
-
-#endif
+	init_vec(&out);
+	str = va_arg(*arg, char*);
+	if (str == NULL)
+		str = "(null)";
+	length = ft_strlen(str);
+	if (opt->precision == -1 || length < opt->precision)
+		opt->precision = length;
+	push_back_str(&out, str, opt->precision);
+	pad_width(&out, opt);
+	return (out);
+}

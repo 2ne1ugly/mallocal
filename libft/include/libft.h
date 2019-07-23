@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/08 13:25:48 by awindham          #+#    #+#             */
-/*   Updated: 2019/03/31 11:35:43 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/07/22 12:04:25 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
+# include "ft_printf.h"
 # include <string.h>
 # include <wchar.h>
 # include <libftstruct.h>
@@ -51,7 +52,6 @@ void		ft_putendl_fd(char *s, int fd);
 void		ft_putnbr_fd(int n, int fd);
 void		ft_putarr(char **str, char c);
 void		ft_putarr_fd(char **str, char c, int fd);
-void		ft_printf(char *fmt, ...);
 void		ft_printpad(int w, char *delim, int align, ...);
 
 /*
@@ -135,7 +135,7 @@ void		ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 void		ft_lstdelone(t_list **alst, void (*del)(void*, size_t));
 t_list		*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 void		ft_lstdel(t_list **alst, void (*del)(void *, size_t));
-void		ft_lstadd(t_list **alst, void *new, size_t size);
+void		ft_lstadd(t_list **alst, void *newp, size_t size);
 void		*ft_lstat(t_list *list, int index);
 int			ft_lstlen(t_list *list);
 void		ft_lstapd(t_list **alst, t_list *elem);

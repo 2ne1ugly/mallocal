@@ -1,31 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/22 15:11:51 by mchi              #+#    #+#             */
-/*   Updated: 2019/07/22 21:46:01 by mchi             ###   ########.fr       */
+/*   Created: 2019/04/25 12:37:25 by mchi              #+#    #+#             */
+/*   Updated: 2019/05/27 12:31:27 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
-#include "malloc_int.h"
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
 
-#include <stdio.h>
+int		ft_printf(const char *format, ...);
+char	*ft_sprintf(const char *format, ...);
+int		ft_fprintf(int fd, const char *format, ...);
 
-int main () 
-{ 
-int i; 
-char * addr; 
-
-i = 0; 
-while (i <1024) 
-{ 
-addr = (char *) malloc (1024); 
-addr [0] = 42; 
-i ++; 
-} 
-return (0); 
-} 
+#endif

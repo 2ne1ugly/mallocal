@@ -1,31 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_sprintf.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/22 15:11:51 by mchi              #+#    #+#             */
-/*   Updated: 2019/07/22 21:46:01 by mchi             ###   ########.fr       */
+/*   Created: 2019/05/27 12:13:30 by mchi              #+#    #+#             */
+/*   Updated: 2019/05/27 12:17:19 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
-#include "malloc_int.h"
+#include "ft_printf_int.h"
 
-#include <stdio.h>
+char	*ft_sprintf(const char *format, ...)
+{
+	t_vec	vec;
+	va_list list;
 
-int main () 
-{ 
-int i; 
-char * addr; 
-
-i = 0; 
-while (i <1024) 
-{ 
-addr = (char *) malloc (1024); 
-addr [0] = 42; 
-i ++; 
-} 
-return (0); 
-} 
+	va_start(list, format);
+	init_vec(&vec);
+	while (*format != '\0')
+	{
+		if (*format == '%')
+			format_this(&vec, &format, &list);
+		else
+			push_back_str(&vec, format, 1);
+		format++;
+	}
+	write(1, vec.ptr, vec.size);
+	va_end(list);
+	return (vec.ptr);
+}

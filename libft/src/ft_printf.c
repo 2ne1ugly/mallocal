@@ -1,23 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   show_alloc_mem.c                                   :+:      :+:    :+:   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/13 01:38:09 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/13 16:24:08 by mchi             ###   ########.fr       */
+/*   Created: 2019/04/25 12:38:12 by mchi              #+#    #+#             */
+/*   Updated: 2019/05/27 12:12:56 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "ft_printf_int.h"
 
-void	print_hex(size_t val)
+int		ft_printf(const char *format, ...)
 {
-	const char charset[] = "0123456789ABCDEF";
+	t_vec	vec;
+	va_list list;
 
-	if (val >= 16)
-		print_hex(val / 16);
-	ft_putchar(charset[val % 16]);
+	va_start(list, format);
+	init_vec(&vec);
+	while (*format != '\0')
+	{
+		if (*format == '%')
+			format_this(&vec, &format, &list);
+		else
+			push_back_str(&vec, format, 1);
+		format++;
+	}
+	write(1, vec.ptr, vec.size);
+	va_end(list);
+	free_vec(&vec);
+	return (vec.size);
 }
-

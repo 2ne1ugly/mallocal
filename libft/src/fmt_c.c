@@ -1,31 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   fmt_c.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/22 15:11:51 by mchi              #+#    #+#             */
-/*   Updated: 2019/07/22 21:46:01 by mchi             ###   ########.fr       */
+/*   Created: 2019/04/25 13:16:42 by mchi              #+#    #+#             */
+/*   Updated: 2019/05/25 18:38:24 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
-#include "malloc_int.h"
+#include "ft_printf_int.h"
 
-#include <stdio.h>
+t_vec	fmt_c(t_opt *opt, va_list *arg)
+{
+	char	c;
+	t_vec	out;
 
-int main () 
-{ 
-int i; 
-char * addr; 
-
-i = 0; 
-while (i <1024) 
-{ 
-addr = (char *) malloc (1024); 
-addr [0] = 42; 
-i ++; 
-} 
-return (0); 
-} 
+	(void)opt;
+	c = va_arg(*arg, int);
+	init_vec(&out);
+	push_back_str(&out, &c, 1);
+	pad_width(&out, opt);
+	return (out);
+}
