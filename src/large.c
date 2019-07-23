@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/22 13:08:41 by mchi              #+#    #+#             */
-/*   Updated: 2019/07/23 15:34:44 by mchi             ###   ########.fr       */
+/*   Updated: 2019/07/23 15:42:13 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	unmap_large(t_meta *meta)
 {
 	t_large		*t;
-	size_t		*size_t;
 
 	t = (void *)meta - sizeof(t_meta) - ST;
 	delete_map_elem((void **)t->back);
@@ -26,7 +25,6 @@ void	unmap_large(t_meta *meta)
 void	*large_malloc(t_map_map *m, size_t size)
 {
 	t_large	*large;
-	// t_meta	*header;
 
 	if (m->count == MAP_MAP_SIZE / ST - 3)
 	{
@@ -42,13 +40,6 @@ void	*large_malloc(t_map_map *m, size_t size)
 	m->block[m->count] = large;
 	large->back = (t_large **)&m->block[m->count];
 	aquire_buffer(&large->header, large->header.cap - sizeof(t_meta) * 2, size);
-	// header = &large->header;
-	// header->cap = align(size + ST * 2, getpagesize()) - ST + 1;
-	// header->req = size;
 	m->count++;
 	return (&large->data);
 }
-
-/*
-**	-st is for marker
-*/

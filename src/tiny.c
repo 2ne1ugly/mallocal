@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/21 20:40:50 by mchi              #+#    #+#             */
-/*   Updated: 2019/07/23 15:33:35 by mchi             ###   ########.fr       */
+/*   Updated: 2019/07/23 15:38:43 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void		*find_tiny_free(t_tiny *t, size_t size)
 		meta = (t_meta *)&t->block[i];
 		if (!(meta->cap & 1) && size + sizeof(t_meta) * 2 <= meta->cap)
 			if (is_capable(meta, size))
-				return aquire_buffer(meta, size, size);
+				return (aquire_buffer(meta, size, size));
 		i += meta->cap / ST;
 	}
 	return (NULL);
@@ -48,12 +48,12 @@ void		*tiny_malloc(t_map_map *m, size_t size)
 			return (NULL);
 		m->count++;
 		((t_tiny *)m->block[i])->back = (t_tiny **)&m->block[i];
-		return find_tiny_free(m->block[i], size);
+		return (find_tiny_free(m->block[i], size));
 	}
 	if (m->next)
-		return tiny_malloc(m->next, size);
+		return (tiny_malloc(m->next, size));
 	m->next = new_empty_map(MAP_MAP_SIZE);
 	if (!m->next)
 		return (NULL);
-	return tiny_malloc(m->next, size);
+	return (tiny_malloc(m->next, size));
 }

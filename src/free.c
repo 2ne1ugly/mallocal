@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/22 13:29:05 by mchi              #+#    #+#             */
-/*   Updated: 2019/07/23 14:35:50 by mchi             ###   ########.fr       */
+/*   Updated: 2019/07/23 15:40:03 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,10 @@ void	defrag_meta(t_meta *meta)
 	if (!(prev_footer->cap & 1))
 	{
 		total_bytes += prev_footer->cap;
-		total_header = (void *)prev_footer - prev_footer->cap + sizeof(t_meta);  
+		total_header = (void *)prev_footer - prev_footer->cap + sizeof(t_meta);
 	}
 	total_header->cap = total_bytes;
 	total_footer->cap = total_bytes;
-	//unmap_if_alone(total_header, total_footer);
 }
 
 void	free(void *ptr)

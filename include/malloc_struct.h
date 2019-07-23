@@ -6,14 +6,14 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/22 16:07:38 by mchi              #+#    #+#             */
-/*   Updated: 2019/07/23 00:36:38 by mchi             ###   ########.fr       */
+/*   Updated: 2019/07/23 15:43:03 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MALLOC_STRUCT_H
 # define MALLOC_STRUCT_H
 
-#include "malloc_int.h"
+# include "malloc_int.h"
 
 # define ST sizeof(size_t)
 # define T_BUFF_CAP 256

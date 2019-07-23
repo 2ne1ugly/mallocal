@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 14:32:47 by mchi              #+#    #+#             */
-/*   Updated: 2019/07/23 14:41:46 by mchi             ###   ########.fr       */
+/*   Updated: 2019/07/23 15:39:32 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ void	*realloc_pass(t_meta *header, size_t size)
 	header->req = size;
 	footer = (void *)header + header->cap - sizeof(t_meta);
 	footer->req = size;
-	return ((void *)header  + sizeof(t_meta));
+	return ((void *)header + sizeof(t_meta));
 }
 
-void 	*realloc(void *ptr, size_t size)
+void	*realloc(void *ptr, size_t size)
 {
 	t_meta	*meta;
 	void	*new;

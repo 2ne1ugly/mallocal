@@ -6,13 +6,13 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/21 20:38:51 by mchi              #+#    #+#             */
-/*   Updated: 2019/07/23 00:32:14 by mchi             ###   ########.fr       */
+/*   Updated: 2019/07/23 15:37:52 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc_int.h"
 
-void			init_g_mal()
+void			init_g_mal(void)
 {
 	t_meta	*header;
 	t_meta	*footer;

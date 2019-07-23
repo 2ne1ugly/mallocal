@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 14:46:28 by mchi              #+#    #+#             */
-/*   Updated: 2019/07/23 15:19:01 by mchi             ###   ########.fr       */
+/*   Updated: 2019/07/23 15:38:20 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ size_t	iterate_page(t_tiny *t)
 	return (total);
 }
 
-size_t	show_tiny()
+size_t	show_tiny(void)
 {
 	t_map_map	*m;
 	t_tiny		*t;
@@ -58,7 +58,7 @@ size_t	show_tiny()
 	return (total);
 }
 
-size_t	show_small()
+size_t	show_small(void)
 {
 	t_map_map	*m;
 	t_tiny		*t;
@@ -82,7 +82,7 @@ size_t	show_small()
 	return (total);
 }
 
-size_t	show_large()
+size_t	show_large(void)
 {
 	t_map_map	*m;
 	t_tiny		*t;
@@ -106,7 +106,7 @@ size_t	show_large()
 	return (total);
 }
 
-void	show_alloc_mem()
+void	show_alloc_mem(void)
 {
 	size_t	total;
 
