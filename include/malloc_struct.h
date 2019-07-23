@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/22 16:07:38 by mchi              #+#    #+#             */
-/*   Updated: 2019/07/22 23:27:22 by mchi             ###   ########.fr       */
+/*   Updated: 2019/07/23 00:36:38 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,18 @@
 #include "malloc_int.h"
 
 # define ST sizeof(size_t)
-# define T_BUFF_CAP 512
-# define S_BUFF_CAP	2048
+# define T_BUFF_CAP 256
+# define S_BUFF_CAP	1048
 # define T_MAP_SIZE (128 * T_BUFF_CAP)
 # define S_MAP_SIZE (128 * S_BUFF_CAP)
-# define T_BLOCK_SIZE (T_MAP_SIZE - 4 * ST)
-# define S_BLOCK_SIZE (S_MAP_SIZE - 4 * ST)
+# define T_BLOCK_SIZE (T_MAP_SIZE - 3 * ST)
+# define S_BLOCK_SIZE (S_MAP_SIZE - 3 * ST)
 # define MAP_MAP_SIZE 4096
 
 typedef struct	s_meta
 {
-	size_t	cap;
-	size_t	req;
+	unsigned	cap;
+	unsigned	req;
 }				t_meta;
 
 /*
@@ -37,7 +37,7 @@ typedef struct	s_meta
 typedef struct	s_tiny
 {
 	struct s_tiny	**back;
-	t_meta			start_mark;
+	size_t			start_mark;
 	size_t			block[T_BLOCK_SIZE / ST];
 	size_t			end_mark;
 }				t_tiny;
@@ -45,7 +45,7 @@ typedef struct	s_tiny
 typedef struct	s_small
 {
 	struct s_small	**back;
-	t_meta			start_mark;
+	size_t			start_mark;
 	size_t			block[S_BLOCK_SIZE / ST];
 	size_t			end_mark;
 }				t_small;
@@ -57,7 +57,7 @@ typedef struct	s_small
 typedef struct	s_large
 {
 	struct s_large	**back;
-	t_meta			start_mark;
+	size_t			start_mark;
 	t_meta			header;
 	void			*data;
 }				t_large;

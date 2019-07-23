@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/21 18:56:42 by mchi              #+#    #+#             */
-/*   Updated: 2019/07/22 19:23:42 by mchi             ###   ########.fr       */
+/*   Updated: 2019/07/22 23:42:57 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,14 @@ void			*new_empty_map(size_t size)
 void			*new_map(size_t size)
 {
 	size_t	*map;
+	t_meta	*header;
+	t_meta	*footer;
 
 	map = new_empty_map(size);
-	map[3] = size - ST * 4;
-	map[size / ST - 4] = size - ST * 4;
+	header = (t_meta *)&map[2];
+	header->cap = size - ST * 3;
+	footer = (t_meta *)&map[size / ST - 3];
+	footer->cap = size - ST * 3;
 	return (map);
 }
 

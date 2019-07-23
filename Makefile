@@ -23,7 +23,7 @@ $(OBJ): obj/%.o : src/%.c
 	$(CC) $(CFLAGS) -o $@ -c $^
 
 test: $(NAME) main.c
-	gcc -Iinclude -Ilibft/include main.c $(SRC) $(LIBFT) -o test
+	gcc -g -Iinclude -Ilibft/include main.c $(SRC) $(LIBFT) -o test
 
 clean:
 	@rm -rf obj/

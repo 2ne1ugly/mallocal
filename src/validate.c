@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/22 15:52:02 by mchi              #+#    #+#             */
-/*   Updated: 2019/07/22 18:39:40 by mchi             ###   ########.fr       */
+/*   Updated: 2019/07/23 00:03:07 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@
 **	skip two elements to skip **back and start_mark
 */
 
-int		validate_meta_map(size_t *m, t_meta *meta)
+int		validate_meta_map(t_meta *m, t_meta *meta)
 {
 	size_t	i;
 
-	i = 3;
-	while (m[i] != 0 && (t_meta *)&m[i] < meta)
-		i += m[i] / ST;
+	i = 2;
+	while (m[i].cap != 0 && (t_meta *)&m[i] < meta)
+		i += m[i].cap / ST;
 	if ((t_meta *)&m[i] == meta)
 		return (1);
 	return (0);

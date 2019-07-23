@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/22 13:08:41 by mchi              #+#    #+#             */
-/*   Updated: 2019/07/22 20:12:06 by mchi             ###   ########.fr       */
+/*   Updated: 2019/07/22 23:37:57 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	*large_malloc(t_map_map *m, size_t size)
 	m->block[m->count] = large;
 	large->back = (struct s_large **)&m->block[m->count];
 	header = &large->header;
-	header->cap = align(size + ST * 3, getpagesize()) - ST + 1;
+	header->cap = align(size + ST * 2, getpagesize()) - ST + 1;
 	header->req = size;
 	m->count++;
 	return (&large->data);

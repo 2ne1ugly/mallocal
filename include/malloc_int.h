@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/21 18:09:26 by mchi              #+#    #+#             */
-/*   Updated: 2019/07/22 20:07:14 by mchi             ###   ########.fr       */
+/*   Updated: 2019/07/23 00:18:49 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ struct
 	t_map_map	tiny;
 	t_map_map	small;
 	t_map_map	large;
+	t_tiny		tiny_prealloc;
+	t_small		small_prealloc;
 	int			set;
 }				g_mal;
 

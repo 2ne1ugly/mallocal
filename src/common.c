@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/21 20:38:51 by mchi              #+#    #+#             */
-/*   Updated: 2019/07/22 20:57:46 by mchi             ###   ########.fr       */
+/*   Updated: 2019/07/23 00:32:14 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,23 @@
 
 void			init_g_mal()
 {
+	t_meta	*header;
+	t_meta	*footer;
+
+	g_mal.tiny.block[0] = &g_mal.tiny_prealloc;
+	g_mal.tiny_prealloc.back = (t_tiny **)&g_mal.tiny.block[0];
+	g_mal.tiny.count++;
+	header = (t_meta *)&g_mal.tiny_prealloc.block[0];
+	header->cap = T_BLOCK_SIZE;
+	footer = (t_meta *)&g_mal.tiny_prealloc.block[T_BLOCK_SIZE / ST - 1];
+	footer->cap = T_BLOCK_SIZE;
+	g_mal.small.block[0] = &g_mal.small_prealloc;
+	g_mal.tiny_prealloc.back = (t_tiny **)&g_mal.small.block[0];
+	g_mal.small.count++;
+	header = (t_meta *)&g_mal.small_prealloc.block[0];
+	header->cap = S_BLOCK_SIZE;
+	footer = (t_meta *)&g_mal.small_prealloc.block[S_BLOCK_SIZE / ST - 1];
+	footer->cap = S_BLOCK_SIZE;
 	g_mal.set = 1;
 }
 
